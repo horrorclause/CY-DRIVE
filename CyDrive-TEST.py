@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-DestiZerg or Cy-Drive
+Cy-Drive
 '''
 
 from datetime import date
@@ -21,29 +21,8 @@ print("""
 +--------------------------------------+
 """)
 
-# Dictionary of Company list and distance in miles. Reference point is Cyzerg office
-company_names_and_miles = {
-    'alexander montessori': 16,
-    'asia shipping': 3.1,
-    'codotrans': 3.6,
-    'tms': 19,
-    'wtdc': 4.3,
-    'brandon brokerage': 11,
-    'south fl ac': 3.1,
-    'cosmedical': 38,
-    'interport': 3.4,
-    'terra global': 17,
-    'gloval': 2.2,
-    'bringer': 3.7,
-    'gava': 4,
-    'elle logistics': 4.2,
-    'lac': 3.5,
-    'mag wholesale': 8.2,
-    'gap': 5.6,
-    'interworld': 5,
-    'dmr': .7,
-    'designs by nature': 19.2
-}
+# Dictionary of Company list and distance in miles. Reference point is main office
+company_names_and_miles = {}
 
 """ 
 CREATE TABLE - TEST 

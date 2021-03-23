@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 '''
-Cy-Drive
+DestiZerg or Cy-Drive
 '''
 
 from datetime import date
 import sqlite3
 from openpyxl import Workbook
 from string import ascii_uppercase as alpha
+from time import sleep
 
 version = "1.0.0"
 # Database and connections to it
@@ -21,8 +22,29 @@ print("""
 +--------------------------------------+
 """)
 
-# Dictionary of Company list and distance in miles. Reference point is main office
-company_names_and_miles = {}
+# Dictionary of Company list and distance in miles. Reference point is Cyzerg office
+company_names_and_miles = {
+    'alexander montessori': 16,
+    'asia shipping': 3.1,
+    'codotrans': 3.6,
+    'tms': 19,
+    'wtdc': 4.3,
+    'brandon brokerage': 11,
+    'south fl ac': 3.1,
+    'cosmedical': 38,
+    'interport': 3.4,
+    'terra global': 17,
+    'gloval': 2.2,
+    'bringer': 3.7,
+    'gava': 4,
+    'elle logistics': 4.2,
+    'lac': 3.5,
+    'mag wholesale': 8.2,
+    'gap': 5.6,
+    'interworld': 5,
+    'dmr': .7,
+    'designs by nature': 19.2
+}
 
 """ 
 CREATE TABLE - TEST 
@@ -88,12 +110,19 @@ def add_records(customer, date_info=date.today()):
 # Get information from DB
 def get_record():
 
-    choice = input("Do you want all records or a date range?\n>> ").lower()
+    choice = input("""
+        Please make a selection:
+    
+            1) All Records
+            2) Specific Date
+            3) Range
+            4) Exit
+    
+>> """)
 
-    if choice == 'all':
-
+    # All records
+    if choice == '1':
         count = 0
-
         info = c.execute('SELECT id, customer, miles, date, reimbursement FROM TEST')
 
         print("=" * 20)
@@ -113,20 +142,34 @@ def get_record():
         print('*@' * 21, "\n* All {} records retrieved successfully  *".format(count))
         print("*@" * 21)
 
-    # TODO Need to figure out how to select specific date range from db
-    elif choice == 'date':
+    # Specific Date
+    elif choice == '2':
+        date_choice = input("Enter date (ex. YYYY-MM-DD) \n>> ")
+        grab_date = c.execute('SELECT CUSTOMER,MILES,DATE,REIMBURSEMENT from test WHERE DATE = ?', (date_choice,))
+        for x in grab_date:
+            print("---------------")
+            print("{} {} miles, {}, ${}".format(x[0], x[1], x[2], x[3]))
 
-        #beginningDate = input("Beginning Date:\n>> ").title()
-        #endDate = input("End Date:\n>> ").title()
-        #print(beginningDate, endDate)
-        c.execute('SELECT * FROM test WHERE date = "2021-11-3"')
-        for x in c:
-            print(x)
+    # Range of dates
+    elif choice == '3':
+        beginning_date = input("Beginning Date (YYYY-MM-DD) :\n>> ").title()
+        end_date = input("End Date (YYYY-MM-DD) :\n>> ").title()
+
+        date_range = c.execute('SELECT DATE,CUSTOMER,MILES,REIMBURSEMENT from test WHERE DATE BETWEEN ? AND ?', (beginning_date, end_date))
+        count = 0
+        for r in date_range:
+            record = "{} :: {} miles :: {} :: ${}".format(r[0], r[1], r[2], r[3])
+            print(record)
+            print("-"*len(record))
+            count += 1
+
+        print("\n[+] {} Total Records Retrieved between {} and {}".format(count, beginning_date, end_date))
+
     # TODO Loop back to beginning if they make a typo
     else:
         print("Wrong choice")
-        print("Goodbye")
-        exit()
+
+        #exit()
 
 
 # Creation of excel spreadsheet for exporting
@@ -225,7 +268,7 @@ while p:
             else:
                 print("\nPlease select either Y or N")  # User made a wrong entry
 
-        print('---- end of z loop ----')
+        #print('---- end of z loop ----')
 
     elif choice == '2':
         get_record()
@@ -243,10 +286,10 @@ while p:
                 print("\n[+] Leaving already?")
                 print("""|
 |
-+-- { Database has been closed } --+
-                                   |
-                                   |
-                           [  BYE  ]""")
++-- { Database has been closed } --+\n""")
+                for x in "GOODBYE":
+                    print(x, end=' ')
+                    sleep(.25)
                 exit()  # Exits code
 
             else:
@@ -275,8 +318,9 @@ conn.close()
 print("\n[+] Leaving already?")
 print("""|
 |
-+-- { Database has been closed } --+
-                                   |
-                                   |
-                           [  BYE  ]""")
++-- { Database has been closed } --+\n""")
+for x in "GOODBYE":
+    print(x, end=' ')
+    sleep(.25)
+
 exit()
